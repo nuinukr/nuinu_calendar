@@ -1316,14 +1316,23 @@ function parseProducts(csv) {
 }
 
 function parseSchedules(csv) {
-  const { rows } = parseCSV(csv);
+  const { headers, rows } = parseCSV(csv);
+  // 날짜 컬럼 인덱스 찾기
+  let dateColIdx = -1;
+  headers.forEach((h, i) => {
+    const n = h.replace(/\s/g,'').toLowerCase();
+    if (n === '날짜' || n === 'date' || n === 'startdate' || n === '시작일') dateColIdx = i;
+  });
+
   return rows.map(row => ({
     type: 'schedule',
     date: normalizeDate(getField(row, ['날짜','date','startdate','시작일'])),
     endDate: normalizeDate(getField(row, ['종료일','enddate','end'])),
     name: getField(row, ['일정명','name','title','일정']),
     category: getField(row, ['카테고리','category']),
-    memo: getField(row, ['메모','memo','note'])
+    memo: getField(row, ['메모','memo','note']),
+    __rowNum: row.__rowNum,
+    __dateCol: dateColIdx + 1
   })).filter(s => s.date && s.name);
 }
 
@@ -1738,7 +1747,12 @@ function openDetail(item) {
     html += row('메모', item.memo ? escapeHtml(item.memo) : '—', !item.memo);
     html += '</div>';
     document.getElementById('detailContent').innerHTML = html;
-    editBtn.href = SHEET_EDIT_URL + '?gid=1585667082';
+    // 해당 일정 행의 날짜 셀로 바로 이동
+    if (item.__rowNum && item.__dateCol) {
+      editBtn.href = `${SHEET_EDIT_URL}?gid=1585667082&range=R${item.__rowNum}C${item.__dateCol}`;
+    } else {
+      editBtn.href = SHEET_EDIT_URL + '?gid=1585667082';
+    }
   } else {
     const statusLabels = { done: '업로드 완료', scheduled: '업로드 예정', draft: '보류' };
     document.getElementById('detailTitle').textContent = item.code || '상품 상세';
@@ -1760,9 +1774,12 @@ function openDetail(item) {
     document.getElementById('detailContent').innerHTML = html;
     const rowInfo = item.code && productRowMap[item.code];
     if (rowInfo) {
-      editBtn.href = `${SHEET_EDIT_URL}?gid=0&range=R${rowInfo.row}C${rowInfo.col}`;
+      // A1 표기법으로 변환 (예: col 4 -> 'D', row 5 -> 'D5')
+      const colLetter = colNumToLetter(rowInfo.col);
+      const a1 = `${colLetter}${rowInfo.row}`;
+      editBtn.href = `${SHEET_EDIT_URL}?gid=0#gid=0&range=${a1}`;
     } else {
-      editBtn.href = SHEET_EDIT_URL + '?gid=0';
+      editBtn.href = SHEET_EDIT_URL + '?gid=0#gid=0';
     }
   }
   document.getElementById('detailModal').classList.add('open');
@@ -1811,6 +1828,17 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 function escapeHtml(str) {
   if (!str) return '';
   return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// 1->A, 2->B, 27->AA 형식으로 변환
+function colNumToLetter(col) {
+  let letter = '';
+  while (col > 0) {
+    const mod = (col - 1) % 26;
+    letter = String.fromCharCode(65 + mod) + letter;
+    col = Math.floor((col - 1) / 26);
+  }
+  return letter || 'A';
 }
 
 /* =========================================================
