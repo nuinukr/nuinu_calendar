@@ -1747,11 +1747,13 @@ function openDetail(item) {
     html += row('메모', item.memo ? escapeHtml(item.memo) : '—', !item.memo);
     html += '</div>';
     document.getElementById('detailContent').innerHTML = html;
-    // 해당 일정 행의 날짜 셀로 바로 이동
+    // 해당 일정 행의 날짜 셀로 바로 이동 (해시 방식이 더 안정적)
     if (item.__rowNum && item.__dateCol) {
-      editBtn.href = `${SHEET_EDIT_URL}?gid=1585667082&range=R${item.__rowNum}C${item.__dateCol}`;
+      const colLetter = colNumToLetter(item.__dateCol);
+      const a1 = `${colLetter}${item.__rowNum}`;
+      editBtn.href = `${SHEET_EDIT_URL}?gid=1585667082#gid=1585667082&range=${a1}`;
     } else {
-      editBtn.href = SHEET_EDIT_URL + '?gid=1585667082';
+      editBtn.href = SHEET_EDIT_URL + '?gid=1585667082#gid=1585667082';
     }
   } else {
     const statusLabels = { done: '업로드 완료', scheduled: '업로드 예정', draft: '보류' };
