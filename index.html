@@ -3,11 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NUINU — 상품 업데이트 캘린더</title>
+<title>NUINU — CALENDAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Jazmin Regular (FONTSPRINGDEMO) */
+  @font-face {
+    font-family: 'Jazmin';
+    src: url('FONTSPRINGDEMO-JazminRegular.woff2') format('woff2'),
+         url('FONTSPRINGDEMO-JazminRegular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
     --cream: #F7F4EF;
     --warm-white: #FDFCFA;
@@ -29,6 +39,7 @@
     --saturday: #3B5A88;
     --border: #C9C2B3;
     --divider: #E0DACB;
+    --highlight: #FFE066;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -55,22 +66,24 @@
   }
   .header-left { display: flex; align-items: center; gap: 20px; }
   .brand {
-    font-family: 'Cinzel', serif;
-    font-size: 38px;
-    letter-spacing: 12px;
-    font-weight: 500;
+    font-family: 'Jazmin', 'Cormorant Garamond', serif;
+    font-size: 42px;
+    letter-spacing: 3px;
+    font-weight: 400;
     color: #FFFFFF;
-    padding-right: 6px;
+    padding-right: 4px;
+    line-height: 1;
   }
   .sub-title {
-    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-    font-size: 11px;
-    letter-spacing: 2.5px;
+    font-family: 'Jazmin', 'Cormorant Garamond', serif;
+    font-size: 22px;
+    letter-spacing: 3px;
     color: #D4C4A8;
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 400;
     border-left: 1px solid rgba(255,255,255,0.3);
     padding-left: 16px;
+    line-height: 1;
   }
 
   .header-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -166,19 +179,98 @@
     border-radius: 4px;
     cursor: pointer;
     color: var(--mid-gray);
+    font-family: inherit;
   }
   .search-clear:hover { border-color: var(--holiday); color: var(--holiday); }
 
-  .search-result-info {
-    background: #FFF8E7;
+  /* ============ SEARCH RESULTS ============ */
+  .search-results {
+    background: var(--warm-white);
     border-bottom: 1px solid var(--border);
-    padding: 10px 40px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--accent);
+    max-height: 320px;
+    overflow-y: auto;
     display: none;
   }
-  .search-result-info.active { display: block; }
+  .search-results.active { display: block; }
+  .search-results-header {
+    padding: 12px 40px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--mid-gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--cream);
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-result-item {
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--divider);
+    transition: background 0.15s;
+  }
+  .search-result-item:hover { background: var(--cream); }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-thumb {
+    width: 44px; height: 44px;
+    border-radius: 3px;
+    object-fit: cover;
+    background: var(--light-gray);
+    flex-shrink: 0;
+  }
+  .search-thumb-placeholder {
+    width: 44px; height: 44px;
+    border-radius: 3px;
+    background: var(--light-gray);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--mid-gray);
+  }
+  .search-thumb-schedule {
+    width: 44px; height: 44px;
+    background: var(--schedule);
+    color: #FFF;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .search-result-info { flex: 1; min-width: 0; }
+  .search-result-code {
+    font-size: 12px;
+    color: var(--mid-gray);
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+  }
+  .search-result-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .search-result-meta {
+    font-size: 11px;
+    color: var(--mid-gray);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .search-result-badge {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
 
   /* ============ SUMMARY BAR ============ */
   .summary-bar {
@@ -259,6 +351,7 @@
     border-radius: 4px;
     transition: all 0.2s;
     display: flex; align-items: center; justify-content: center;
+    font-family: inherit;
   }
   .nav-btn:hover { background: var(--charcoal); color: #FFF; border-color: var(--charcoal); }
   .nav-btn.today {
@@ -333,24 +426,31 @@
 
   .cal-day {
     background: var(--warm-white);
-    min-height: 160px;
+    min-height: 170px;
     padding: 10px;
     border: 1px solid var(--border);
     position: relative;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, background 0.4s;
+    overflow: hidden;
   }
   .cal-day.other-month { background: #EEEAE1; opacity: 0.55; }
   .cal-day.today { border-color: var(--charcoal); border-width: 2px; padding: 9px; }
   .cal-day.holiday-day { background: #FEF5F5; }
   .cal-day:hover { border-color: var(--accent); }
-  .cal-day.dimmed { opacity: 0.35; }
+  .cal-day.highlight-day {
+    animation: highlightPulse 1.8s ease 3;
+  }
+  @keyframes highlightPulse {
+    0%, 100% { background: var(--warm-white); }
+    50% { background: var(--highlight); }
+  }
 
   .day-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 8px;
-    min-height: 18px;
+    min-height: 20px;
   }
   .day-num {
     font-size: 15px;
@@ -372,57 +472,61 @@
     font-size: 10px;
     color: var(--holiday);
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.1;
     text-align: right;
     max-width: 65%;
     word-break: keep-all;
   }
 
-  /* 일정 기간 바 (이어진 표시) */
-  .schedule-bar-row {
+  /* 일정 바 — 연결된 모양 */
+  .schedule-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    padding: 32px 0 0;
+    z-index: 1;
+  }
+  .schedule-row {
+    position: absolute;
+    height: 22px;
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
-    height: 22px;
+    pointer-events: auto;
     cursor: pointer;
+    padding: 0 4px;
+  }
+  .schedule-row-bar {
+    width: 100%;
+    height: 22px;
+    background: var(--schedule-bg);
+    color: var(--schedule);
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     transition: opacity 0.15s;
   }
-  .schedule-bar-row:hover { opacity: 0.85; }
-  .schedule-bar {
-    background: var(--schedule-bg);
-    border-left: 3px solid var(--schedule);
-    color: var(--schedule);
-    font-size: 11px;
-    font-weight: 800;
-    padding: 3px 8px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .schedule-bar.middle {
-    border-left: none;
-    padding-left: 4px;
-  }
-  .schedule-bar.end {
-    border-left: none;
-    padding-left: 4px;
-  }
-  .schedule-bar .schedule-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  .schedule-row-bar.has-left { border-left: 3px solid var(--schedule); padding-left: 8px; }
+  .schedule-row-bar.rounded-left { border-top-left-radius: 3px; border-bottom-left-radius: 3px; }
+  .schedule-row-bar.rounded-right { border-top-right-radius: 3px; border-bottom-right-radius: 3px; }
+  .schedule-row:hover .schedule-row-bar { opacity: 0.85; }
 
-  .product-cards { display: flex; flex-direction: column; gap: 4px; }
+  .product-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    z-index: 2;
+  }
 
   .product-card {
     border-radius: 3px;
     padding: 5px 7px;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.4;
     cursor: pointer;
     transition: opacity 0.15s, transform 0.1s;
@@ -438,25 +542,25 @@
   .product-card.draft { background: var(--draft-bg); border-left: 3px solid var(--draft); }
 
   .card-thumb {
-    width: 30px; height: 30px;
+    width: 32px; height: 32px;
     border-radius: 2px;
     object-fit: cover;
     flex-shrink: 0;
     background: var(--light-gray);
   }
   .card-thumb-placeholder {
-    width: 30px; height: 30px;
+    width: 32px; height: 32px;
     border-radius: 2px;
     background: var(--light-gray);
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--mid-gray);
     font-weight: 800;
   }
   .card-info { flex: 1; min-width: 0; }
   .card-code {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--text);
     letter-spacing: 0.3px;
     font-weight: 800;
@@ -465,14 +569,14 @@
     text-overflow: ellipsis;
   }
   .card-sub {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--mid-gray);
     font-weight: 700;
     margin-top: 1px;
   }
 
   .more-badge {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--charcoal);
     letter-spacing: 0.3px;
     padding: 3px 6px;
@@ -568,7 +672,8 @@
     width: 100%;
     max-height: 360px;
     object-fit: contain;
-    background: #F0EBDF;
+    background: #FFFFFF;
+    border: 1px solid var(--divider);
     border-radius: 4px;
     display: block;
   }
@@ -577,6 +682,7 @@
   .detail-row:last-child { border-bottom: none; }
   .detail-label { color: var(--mid-gray); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; flex-shrink: 0; font-weight: 800; min-width: 90px; }
   .detail-val { font-weight: 700; text-align: right; word-break: break-word; color: var(--text); }
+  .detail-val.empty { color: #B5AFA0; font-weight: 500; }
   .status-badge {
     display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; letter-spacing: 0.5px; font-weight: 800;
   }
@@ -645,14 +751,20 @@
     margin-top: 16px;
   }
   .report-year-picker select {
-    background: rgba(255,255,255,0.1);
-    color: #FFF;
+    background: #FFF;
+    color: #1A1A1A;
     border: 1px solid rgba(255,255,255,0.4);
-    padding: 6px 10px;
+    padding: 6px 14px;
     font-family: inherit;
     font-size: 13px;
     font-weight: 800;
     border-radius: 4px;
+    cursor: pointer;
+  }
+  .report-year-picker select option {
+    color: #1A1A1A;
+    background: #FFF;
+    font-weight: 700;
   }
 
   .report-body {
@@ -731,7 +843,7 @@
     font-weight: 700;
   }
   .report-bar-label {
-    width: 120px;
+    width: 140px;
     flex-shrink: 0;
     font-weight: 800;
     font-size: 12px;
@@ -822,14 +934,16 @@
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 900px) {
-    .header, .summary-bar, .month-nav, .calendar-wrap, .search-bar, .search-result-info { padding-left: 20px; padding-right: 20px; }
+    .header, .summary-bar, .month-nav, .calendar-wrap, .search-bar { padding-left: 20px; padding-right: 20px; }
+    .search-results-header, .search-result-item { padding-left: 20px; padding-right: 20px; }
     .summary-bar { gap: 24px; padding: 18px 20px; }
     .summary-count { font-size: 30px; }
-    .brand { font-size: 28px; letter-spacing: 8px; }
+    .brand { font-size: 32px; letter-spacing: 2px; }
+    .sub-title { font-size: 18px; }
     .cal-day { min-height: 110px; padding: 7px; }
-    .card-thumb, .card-thumb-placeholder { width: 26px; height: 26px; }
-    .card-code { font-size: 10px; }
-    .card-sub { font-size: 9px; }
+    .card-thumb, .card-thumb-placeholder { width: 28px; height: 28px; }
+    .card-code { font-size: 11px; }
+    .card-sub { font-size: 10px; }
     .legend-pill { font-size: 12px; padding: 7px 12px; }
     .last-updated { width: 100%; margin: 8px 0 0; text-align: left; }
     .year-month-display { font-size: 22px; min-width: 0; }
@@ -842,10 +956,11 @@
     .day-num { font-size: 12px; }
     .card-thumb, .card-thumb-placeholder { width: 22px; height: 22px; }
     .card-sub { display: none; }
-    .card-code { font-size: 9px; }
+    .card-code { font-size: 10px; }
     .holiday-label { display: none; }
-    .schedule-bar { font-size: 9px; height: 16px; padding: 2px 4px; }
-    .schedule-bar-row { height: 16px; }
+    .schedule-row-bar { font-size: 10px; padding: 0 6px; }
+    .schedule-row { height: 18px; }
+    .schedule-row-bar { height: 18px; }
   }
 </style>
 </head>
@@ -855,7 +970,7 @@
 <div class="header">
   <div class="header-left">
     <span class="brand">NUINU</span>
-    <span class="sub-title">Product Update Calendar</span>
+    <span class="sub-title">CALENDAR</span>
   </div>
   <div class="header-right">
     <span class="legend-pill done">● 업로드 완료</span>
@@ -869,7 +984,7 @@
 
 <!-- SEARCH BAR -->
 <div class="search-bar" id="searchBar" style="display:none;">
-  <input type="text" id="searchInput" placeholder="검색어 입력 (상품코드 / 일정 카테고리 / 메모 내용)" oninput="onSearchInput()">
+  <input type="text" id="searchInput" placeholder="검색어 입력 (상품코드 / 일정명 / 카테고리 / 메모)" oninput="onSearchInput()">
   <div class="search-tags">
     <span class="search-tag active" data-mode="all" onclick="setSearchMode('all')">전체</span>
     <span class="search-tag" data-mode="product" onclick="setSearchMode('product')">상품</span>
@@ -878,8 +993,8 @@
   <button class="search-clear" onclick="clearSearch()">초기화</button>
 </div>
 
-<!-- SEARCH RESULT INFO -->
-<div class="search-result-info" id="searchResultInfo"></div>
+<!-- SEARCH RESULTS -->
+<div class="search-results" id="searchResults"></div>
 
 <!-- SUMMARY BAR -->
 <div class="summary-bar" id="summaryBar" style="display:none;">
@@ -931,7 +1046,7 @@
     </div>
     <div id="detailContent"></div>
     <div class="modal-footer">
-      <a href="https://docs.google.com/spreadsheets/d/1L-M36PIt3xd52FnkDE5wtJ68omApqtG5SpRtOs8tcmA/edit" target="_blank" class="modal-btn primary">📝 시트에서 수정</a>
+      <a href="#" target="_blank" class="modal-btn primary" id="editSheetBtn">📝 시트에서 수정</a>
       <button class="modal-btn" onclick="closeModal('detailModal')">닫기</button>
     </div>
   </div>
@@ -950,8 +1065,10 @@
 
 <script>
 /* =========================================================
-   기본 설정 (URL 미리 박아둠 - 공유 시 바로 작동)
+   기본 설정
    ========================================================= */
+const SHEET_EDIT_URL = "https://docs.google.com/spreadsheets/d/1L-M36PIt3xd52FnkDE5wtJ68omApqtG5SpRtOs8tcmA/edit";
+
 const DEFAULT_CONFIG = {
   PRODUCT_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQv9LaUTg3QPyVHcBvACBkzCDxPPwSauRckCIJABUjfyInMAQB7o4xShrsksqFoJ-E-9-HeO4GXYH9/pub?gid=0&single=true&output=csv",
   SCHEDULE_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQv9LaUTg3QPyVHcBvACBkzCDxPPwSauRckCIJABUjfyInMAQB7o4xShrsksqFoJ-E-9-HeO4GXYH9/pub?gid=1585667082&single=true&output=csv",
@@ -965,30 +1082,34 @@ const SHEET_CONFIG = {
 };
 
 /* =========================================================
-   한국 공휴일 (2025-2027)
+   한국 공휴일 (2025-2027) — "대체공휴일" 완전 표기
    ========================================================= */
 const KR_HOLIDAYS = {
-  "2025-01-01": "신정", "2025-01-28": "설날 연휴", "2025-01-29": "설날", "2025-01-30": "설날 연휴",
-  "2025-03-01": "삼일절", "2025-03-03": "삼일절 대체",
+  "2025-01-01": "신정",
+  "2025-01-28": "설날 연휴", "2025-01-29": "설날", "2025-01-30": "설날 연휴",
+  "2025-03-01": "삼일절", "2025-03-03": "삼일절 대체공휴일",
   "2025-05-05": "어린이날/석가탄신일", "2025-05-06": "대체공휴일",
   "2025-06-06": "현충일", "2025-08-15": "광복절", "2025-10-03": "개천절",
   "2025-10-06": "추석 연휴", "2025-10-07": "추석", "2025-10-08": "추석 연휴",
   "2025-10-09": "한글날", "2025-12-25": "성탄절",
-  "2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴",
-  "2026-03-01": "삼일절", "2026-03-02": "삼일절 대체",
-  "2026-05-05": "어린이날", "2026-05-24": "석가탄신일", "2026-05-25": "석가탄신일 대체",
-  "2026-06-06": "현충일", "2026-08-15": "광복절", "2026-08-17": "광복절 대체",
+  "2026-01-01": "신정",
+  "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴",
+  "2026-03-01": "삼일절", "2026-03-02": "삼일절 대체공휴일",
+  "2026-05-05": "어린이날", "2026-05-24": "석가탄신일", "2026-05-25": "석가탄신일 대체공휴일",
+  "2026-06-06": "현충일", "2026-08-15": "광복절", "2026-08-17": "광복절 대체공휴일",
   "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴",
-  "2026-10-03": "개천절", "2026-10-05": "개천절 대체",
+  "2026-10-03": "개천절", "2026-10-05": "개천절 대체공휴일",
   "2026-10-09": "한글날", "2026-12-25": "성탄절",
-  "2027-01-01": "신정", "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴",
-  "2027-02-09": "설날 대체", "2027-03-01": "삼일절",
+  "2027-01-01": "신정",
+  "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴",
+  "2027-02-09": "설날 대체공휴일",
+  "2027-03-01": "삼일절",
   "2027-05-05": "어린이날", "2027-05-13": "석가탄신일",
-  "2027-06-06": "현충일", "2027-06-07": "현충일 대체",
-  "2027-08-15": "광복절", "2027-08-16": "광복절 대체",
+  "2027-06-06": "현충일", "2027-06-07": "현충일 대체공휴일",
+  "2027-08-15": "광복절", "2027-08-16": "광복절 대체공휴일",
   "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴",
-  "2027-10-03": "개천절", "2027-10-04": "개천절 대체",
-  "2027-10-09": "한글날", "2027-10-11": "한글날 대체",
+  "2027-10-03": "개천절", "2027-10-04": "개천절 대체공휴일",
+  "2027-10-09": "한글날", "2027-10-11": "한글날 대체공휴일",
   "2027-12-25": "성탄절"
 };
 
@@ -998,9 +1119,11 @@ const KR_HOLIDAYS = {
 let currentYear, currentMonth;
 let products = [];
 let schedules = [];
-let categoryMap = {};
+let categoryMap = { categoryByCode: {}, subcategoryByCode: {}, all: [] };
+let productRowMap = {}; // 상품코드 -> 시트 행 번호
 let searchKeyword = '';
 let searchMode = 'all';
+let highlightTarget = null;
 const today = new Date();
 
 /* =========================================================
@@ -1010,7 +1133,6 @@ function init() {
   currentYear = today.getFullYear();
   currentMonth = today.getMonth();
 
-  // 사용자 저장 URL이 있으면 사용, 없으면 기본값 (박아둔 URL) 사용
   const savedP = localStorage.getItem('nuinu_product_url');
   const savedS = localStorage.getItem('nuinu_schedule_url');
   const savedC = localStorage.getItem('nuinu_category_url');
@@ -1094,6 +1216,7 @@ function showConfigPanel() {
   document.getElementById('summaryBar').style.display = 'none';
   document.getElementById('monthNav').style.display = 'none';
   document.getElementById('searchBar').style.display = 'none';
+  document.getElementById('searchResults').classList.remove('active');
 }
 
 function saveSheetUrls() {
@@ -1133,8 +1256,8 @@ async function loadFromSheets() {
   if (btn) btn.classList.add('loading');
 
   try {
-    // 카테고리 시트 (있으면)
-    categoryMap = {};
+    // 카테고리
+    categoryMap = { categoryByCode: {}, subcategoryByCode: {}, all: [] };
     if (SHEET_CONFIG.CATEGORY_CSV_URL) {
       try {
         const cUrl = SHEET_CONFIG.CATEGORY_CSV_URL + (SHEET_CONFIG.CATEGORY_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
@@ -1146,14 +1269,16 @@ async function loadFromSheets() {
       } catch(e) { console.warn('카테고리 로드 실패:', e); }
     }
 
-    // 상품 시트
+    // 상품
     const pUrl = SHEET_CONFIG.PRODUCT_CSV_URL + (SHEET_CONFIG.PRODUCT_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
     const pRes = await fetch(pUrl);
     if (!pRes.ok) throw new Error('상품 시트를 불러올 수 없습니다');
     const pCsv = await pRes.text();
-    products = parseProducts(pCsv);
+    const parsed = parseProducts(pCsv);
+    products = parsed.products;
+    productRowMap = parsed.rowMap;
 
-    // 일정 시트
+    // 일정
     schedules = [];
     if (SHEET_CONFIG.SCHEDULE_CSV_URL) {
       try {
@@ -1202,23 +1327,25 @@ function parseCSV(text) {
     cur += ch;
   }
   if (cur || row.length) { row.push(cur); lines.push(row); }
-  if (lines.length < 2) return [];
+  if (lines.length < 2) return { headers: [], rows: [] };
 
   const headers = lines[0].map(h => h.trim());
-  const items = [];
+  const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const row = lines[i];
-    if (!row || row.every(c => !c || !c.trim())) continue;
+    const rowArr = lines[i];
+    if (!rowArr || rowArr.every(c => !c || !c.trim())) continue;
     const obj = {};
-    headers.forEach((h, idx) => obj[h] = (row[idx] || '').trim());
-    items.push(obj);
+    headers.forEach((h, idx) => obj[h] = (rowArr[idx] || '').trim());
+    obj.__rowNum = i + 1; // 시트 행 번호 (헤더 포함 1-index)
+    rows.push(obj);
   }
-  return items;
+  return { headers, rows };
 }
 
 function getField(row, keys) {
   for (const k of keys) {
     for (const key in row) {
+      if (key === '__rowNum') continue;
       if (key.replace(/\s/g,'').toLowerCase() === k.replace(/\s/g,'').toLowerCase()) return row[key];
     }
   }
@@ -1226,15 +1353,10 @@ function getField(row, keys) {
 }
 
 function parseCategoryMap(csv) {
-  // 카테고리 시트: 카테고리 | 코드 | 구분 | 코드 순
-  const raw = parseCSV(csv);
-  const map = {
-    categoryByCode: {},  // "TO" -> "상의" 같은 맵핑
-    subcategoryByCode: {}, // 소분류 코드 -> 이름
-    all: []
-  };
-  raw.forEach(row => {
-    const keys = Object.keys(row);
+  const { rows } = parseCSV(csv);
+  const map = { categoryByCode: {}, subcategoryByCode: {}, all: [] };
+  rows.forEach(row => {
+    const keys = Object.keys(row).filter(k => k !== '__rowNum');
     if (keys.length >= 2) {
       const cat = row[keys[0]] || '';
       const catCode = row[keys[1]] || '';
@@ -1249,8 +1371,18 @@ function parseCategoryMap(csv) {
 }
 
 function parseProducts(csv) {
-  const raw = parseCSV(csv);
-  return raw.map(row => {
+  const { headers, rows } = parseCSV(csv);
+
+  // 상품코드 컬럼 인덱스 찾기 (시트 수정 링크용)
+  let codeColIdx = -1;
+  headers.forEach((h, i) => {
+    const normalized = h.replace(/\s/g,'').toLowerCase();
+    if (normalized === '상품코드' || normalized === '코드' || normalized === 'code' || normalized === 'productcode') codeColIdx = i;
+  });
+
+  const rowMap = {}; // 상품코드 -> { row, col }
+
+  const products = rows.map(row => {
     let status = getField(row, ['상태','status']).toLowerCase();
     if (status.includes('완료') || status.includes('done')) status = 'done';
     else if (status.includes('예정') || status.includes('scheduled')) status = 'scheduled';
@@ -1259,6 +1391,10 @@ function parseProducts(csv) {
 
     const code = getField(row, ['상품코드','코드','code','productcode']);
     const manualImage = getField(row, ['사진url','사진','이미지','image','imageurl','photo']);
+
+    if (code && codeColIdx >= 0) {
+      rowMap[code] = { row: row.__rowNum, col: codeColIdx + 1 };
+    }
 
     return {
       type: 'product',
@@ -1275,12 +1411,14 @@ function parseProducts(csv) {
       image: manualImage ? convertDriveUrl(manualImage) : '',
       vendor: getField(row, ['거래처코드','거래처','메모','vendor','vendorcode','memo','note'])
     };
-  }).filter(p => p.date && (p.code || p.image)); // 상품명 없어도 코드나 사진 있으면 OK
+  }).filter(p => p.date && (p.code || p.image || p.name));
+
+  return { products, rowMap };
 }
 
 function parseSchedules(csv) {
-  const raw = parseCSV(csv);
-  return raw.map(row => ({
+  const { rows } = parseCSV(csv);
+  return rows.map(row => ({
     type: 'schedule',
     date: normalizeDate(getField(row, ['날짜','date','startdate','시작일'])),
     endDate: normalizeDate(getField(row, ['종료일','enddate','end'])),
@@ -1316,12 +1454,12 @@ function setSearchMode(mode) {
   document.querySelectorAll('.search-tag').forEach(t => {
     t.classList.toggle('active', t.dataset.mode === mode);
   });
-  renderCalendar();
+  renderSearchResults();
 }
 
 function onSearchInput() {
   searchKeyword = document.getElementById('searchInput').value.trim().toLowerCase();
-  renderCalendar();
+  renderSearchResults();
 }
 
 function clearSearch() {
@@ -1331,23 +1469,113 @@ function clearSearch() {
   document.querySelectorAll('.search-tag').forEach(t => {
     t.classList.toggle('active', t.dataset.mode === 'all');
   });
-  renderCalendar();
+  renderSearchResults();
 }
 
 function matchesSearch(item) {
-  if (!searchKeyword) return true;
+  if (!searchKeyword) return false;
   if (item.type === 'product') {
     if (searchMode === 'schedule') return false;
-    // 상품 검색: 상품코드
     return (item.code || '').toLowerCase().includes(searchKeyword) ||
            (item.name || '').toLowerCase().includes(searchKeyword);
   } else {
     if (searchMode === 'product') return false;
-    // 일정 검색: 카테고리 + 메모
     return (item.category || '').toLowerCase().includes(searchKeyword) ||
            (item.memo || '').toLowerCase().includes(searchKeyword) ||
            (item.name || '').toLowerCase().includes(searchKeyword);
   }
+}
+
+function renderSearchResults() {
+  const box = document.getElementById('searchResults');
+  if (!searchKeyword) {
+    box.classList.remove('active');
+    box.innerHTML = '';
+    return;
+  }
+
+  const matchedProducts = products.filter(p => matchesSearch(p));
+  const matchedSchedules = schedules.filter(s => matchesSearch(s));
+  const total = matchedProducts.length + matchedSchedules.length;
+
+  box.classList.add('active');
+
+  if (total === 0) {
+    box.innerHTML = `
+      <div class="search-results-header">🔍 "${escapeHtml(searchKeyword)}" 검색결과: 0건</div>
+      <div style="padding:30px 40px;text-align:center;color:var(--mid-gray);font-weight:700;font-size:13px;">
+        일치하는 항목이 없습니다.
+      </div>
+    `;
+    return;
+  }
+
+  const statusLabels = { done: '완료', scheduled: '예정', draft: '보류' };
+  let html = `<div class="search-results-header">🔍 "${escapeHtml(searchKeyword)}" 검색결과: ${total}건 (상품 ${matchedProducts.length} / 일정 ${matchedSchedules.length}) — 클릭하면 해당 날짜로 이동</div>`;
+
+  matchedProducts.forEach((p, idx) => {
+    const thumb = p.image
+      ? `<img class="search-thumb" src="${p.image}" onerror="this.style.display='none'">`
+      : `<div class="search-thumb-placeholder">${(p.code||'').substring(0,2) || '—'}</div>`;
+    html += `
+      <div class="search-result-item" onclick="jumpToItem('product', ${idx})">
+        ${thumb}
+        <div class="search-result-info">
+          <div class="search-result-code">${escapeHtml(p.code || '코드없음')}</div>
+          <div class="search-result-name">${escapeHtml(p.name || '(상품명 없음)')}</div>
+          <div class="search-result-meta">업로드 ${p.date}${p.arriveDate ? ' · 입고 ' + p.arriveDate : ''}</div>
+        </div>
+        <span class="search-result-badge status-badge ${p.status}">${statusLabels[p.status]}</span>
+      </div>
+    `;
+  });
+
+  matchedSchedules.forEach((s, idx) => {
+    html += `
+      <div class="search-result-item" onclick="jumpToItem('schedule', ${idx})">
+        <div class="search-thumb-schedule">📅</div>
+        <div class="search-result-info">
+          <div class="search-result-code">${escapeHtml(s.category || '일정')}</div>
+          <div class="search-result-name">${escapeHtml(s.name)}</div>
+          <div class="search-result-meta">${s.date}${s.endDate && s.endDate !== s.date ? ' ~ ' + s.endDate : ''}${s.memo ? ' · ' + escapeHtml(s.memo) : ''}</div>
+        </div>
+        <span class="search-result-badge status-badge schedule">일정</span>
+      </div>
+    `;
+  });
+
+  box.innerHTML = html;
+
+  // 컨텍스트용 매칭 배열 저장
+  window._searchMatchedProducts = matchedProducts;
+  window._searchMatchedSchedules = matchedSchedules;
+}
+
+function jumpToItem(type, idx) {
+  const item = type === 'product' 
+    ? window._searchMatchedProducts?.[idx]
+    : window._searchMatchedSchedules?.[idx];
+  if (!item) return;
+
+  const date = item.date;
+  const m = date.match(/(\d{4})-(\d{2})/);
+  if (!m) return;
+
+  const targetYear = parseInt(m[1]);
+  const targetMonth = parseInt(m[2]) - 1;
+
+  currentYear = targetYear;
+  currentMonth = targetMonth;
+  document.getElementById('yearSelect').value = currentYear;
+  document.getElementById('monthSelect').value = currentMonth;
+
+  highlightTarget = { type, key: type === 'product' ? item.code : item.name + '|' + item.date, date };
+  renderCalendar();
+
+  // 스크롤
+  setTimeout(() => {
+    document.querySelector('.calendar-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
 }
 
 /* =========================================================
@@ -1382,17 +1610,6 @@ function renderCalendar() {
   if (!grid) return;
   grid.innerHTML = '';
 
-  // 검색 결과 요약
-  const info = document.getElementById('searchResultInfo');
-  if (searchKeyword) {
-    const matchedProducts = products.filter(matchesSearch);
-    const matchedSchedules = schedules.filter(matchesSearch);
-    info.classList.add('active');
-    info.textContent = `🔍 "${searchKeyword}" 검색결과: 상품 ${matchedProducts.length}개, 일정 ${matchedSchedules.length}개`;
-  } else {
-    info.classList.remove('active');
-  }
-
   const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
   const allCells = [];
 
@@ -1426,7 +1643,6 @@ function renderCalendar() {
       cell.classList.add('today');
     }
 
-    // Day header
     const dayHeader = document.createElement('div');
     dayHeader.className = 'day-header';
     const numEl = document.createElement('span');
@@ -1448,114 +1664,173 @@ function renderCalendar() {
     cell.dataset.weekday = weekday;
     cell.dataset.isCurrent = isCurrentMonth;
 
-    allCells.push({ cell, dateStr, weekday, isCurrentMonth });
+    allCells.push({ cell, dateStr, weekday, isCurrentMonth, cellIdx: i });
     grid.appendChild(cell);
   }
 
-  // 렌더: 일정을 먼저 (이어진 바)
-  renderSchedules(allCells);
-  // 그 다음 상품
+  // 일정을 먼저 렌더
+  renderSchedulesConnected(allCells, grid);
+  // 상품
   renderProducts(allCells);
 
   updateSummary();
+  applyHighlight();
 }
 
 /* =========================================================
-   일정 렌더 (이어진 바)
+   연결된 일정 바 렌더
    ========================================================= */
-function renderSchedules(allCells) {
-  // 현재 표시되는 모든 날짜 범위
+function renderSchedulesConnected(allCells, grid) {
   if (allCells.length === 0) return;
   const firstDate = allCells[0].dateStr;
   const lastDate = allCells[allCells.length - 1].dateStr;
 
-  // 이 범위에 걸친 일정들
-  const visibleSchedules = schedules.filter(s => {
-    if (!matchesSearch(s)) return false;
-    const sStart = s.date;
+  // 표시 범위의 일정만
+  const visible = schedules.filter(s => {
     const sEnd = s.endDate || s.date;
-    return sEnd >= firstDate && sStart <= lastDate;
+    return sEnd >= firstDate && s.date <= lastDate;
   });
 
-  // 각 일정마다 각 주(week)에서 어떻게 보일지 결정
-  visibleSchedules.forEach(sch => {
+  // 각 주별로 처리
+  const rowsInWeek = {}; // weekIdx -> 이미 사용된 row 슬롯
+  const weekCount = Math.ceil(allCells.length / 7);
+  for (let w = 0; w < weekCount; w++) rowsInWeek[w] = [];
+
+  // 일정을 시작일 기준 정렬 + 긴 일정 먼저
+  visible.sort((a, b) => {
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    const aLen = (a.endDate || a.date).localeCompare(a.date);
+    const bLen = (b.endDate || b.date).localeCompare(b.date);
+    return bLen - aLen;
+  });
+
+  // 레이어 준비 (주별)
+  const weekLayers = [];
+  for (let w = 0; w < weekCount; w++) {
+    const layer = document.createElement('div');
+    layer.style.position = 'absolute';
+    layer.style.left = '0';
+    layer.style.right = '0';
+    layer.style.pointerEvents = 'none';
+    weekLayers.push(layer);
+  }
+
+  // 일정별로 각 주 범위 찾기
+  visible.forEach(sch => {
     const sStart = sch.date;
     const sEnd = sch.endDate || sch.date;
 
-    // 각 주 단위로 그리기
-    for (let weekStart = 0; weekStart < allCells.length; weekStart += 7) {
-      const weekEnd = weekStart + 6;
-      const weekStartDate = allCells[weekStart].dateStr;
-      const weekEndDate = allCells[weekEnd].dateStr;
+    for (let w = 0; w < weekCount; w++) {
+      const wStart = w * 7;
+      const wEnd = Math.min(wStart + 6, allCells.length - 1);
+      const weekStartDate = allCells[wStart].dateStr;
+      const weekEndDate = allCells[wEnd].dateStr;
 
-      // 이 주에 일정이 걸쳐있는지
       if (sEnd < weekStartDate || sStart > weekEndDate) continue;
 
-      // 시작/끝 셀 인덱스 계산
-      let startIdx = weekStart;
-      let endIdx = weekEnd;
-      for (let i = weekStart; i <= weekEnd; i++) {
-        if (allCells[i].dateStr === sStart || (sStart < allCells[i].dateStr && allCells[i-1] && allCells[i-1].dateStr < sStart)) {
-          if (allCells[i].dateStr >= sStart) { startIdx = i; break; }
+      // 이 주에서 차지하는 칼럼 범위
+      let startCol = 0, endCol = 6;
+      for (let c = 0; c <= 6; c++) {
+        if (allCells[wStart + c].dateStr >= sStart) { startCol = c; break; }
+      }
+      for (let c = 6; c >= 0; c--) {
+        if (allCells[wStart + c] && allCells[wStart + c].dateStr <= sEnd) { endCol = c; break; }
+      }
+
+      // 사용할 row 슬롯 찾기 (겹치지 않는 row)
+      let slotIdx = 0;
+      while (true) {
+        const usedSlots = rowsInWeek[w][slotIdx] || [];
+        const overlap = usedSlots.some(([s, e]) => !(endCol < s || startCol > e));
+        if (!overlap) {
+          if (!rowsInWeek[w][slotIdx]) rowsInWeek[w][slotIdx] = [];
+          rowsInWeek[w][slotIdx].push([startCol, endCol]);
+          break;
         }
-      }
-      // 정확하게 다시 계산
-      startIdx = weekStart;
-      endIdx = weekEnd;
-      for (let i = weekStart; i <= weekEnd; i++) {
-        if (allCells[i].dateStr >= sStart) { startIdx = i; break; }
-      }
-      for (let i = weekEnd; i >= weekStart; i--) {
-        if (allCells[i].dateStr <= sEnd) { endIdx = i; break; }
+        slotIdx++;
       }
 
-      // 시작 셀에 실제 바 넣기
-      const startCell = allCells[startIdx].cell;
-      const row = document.createElement('div');
-      row.className = 'schedule-bar-row';
-      row.onclick = (e) => { e.stopPropagation(); openDetail(sch); };
+      const isStart = sStart >= weekStartDate;
+      const isEnd = sEnd <= weekEndDate;
 
+      // 바 DOM 생성
       const bar = document.createElement('div');
-      bar.className = 'schedule-bar';
-      bar.innerHTML = `<span class="schedule-name">📅 ${escapeHtml(sch.name)}${sch.category ? ' · ' + escapeHtml(sch.category) : ''}</span>`;
+      bar.className = 'schedule-row';
+      const barInner = document.createElement('div');
+      barInner.className = 'schedule-row-bar';
+      if (isStart) barInner.classList.add('has-left', 'rounded-left');
+      if (isEnd) barInner.classList.add('rounded-right');
+      barInner.textContent = sch.name;
+      bar.appendChild(barInner);
+      bar.onclick = (e) => { e.stopPropagation(); openDetail(sch); };
+      bar.dataset.schKey = sch.name + '|' + sch.date;
 
-      // 끝 셀까지 걸쳐있는 경우 너비 계산
-      const span = endIdx - startIdx + 1;
-      if (span > 1) {
-        // 여러 칸에 걸쳐지면 실제 분할해서 넣기
-        row.style.gridColumn = `span ${span}`;
-      }
+      // 위치 계산 (그리드 기준 %)
+      const leftPct = (startCol / 7) * 100;
+      const widthPct = ((endCol - startCol + 1) / 7) * 100;
+      bar.style.position = 'absolute';
+      bar.style.left = `calc(${leftPct}% + 2px)`;
+      bar.style.width = `calc(${widthPct}% - 4px)`;
+      bar.style.top = `${32 + slotIdx * 24}px`;
+      bar.style.pointerEvents = 'auto';
 
-      row.appendChild(bar);
-      startCell.appendChild(row);
-
-      // 중간/끝 셀에는 빈 바만 넣어서 정렬 유지
-      for (let i = startIdx + 1; i <= endIdx; i++) {
-        const fillRow = document.createElement('div');
-        fillRow.className = 'schedule-bar-row';
-        fillRow.onclick = (e) => { e.stopPropagation(); openDetail(sch); };
-        const fillBar = document.createElement('div');
-        fillBar.className = 'schedule-bar ' + (i === endIdx ? 'end' : 'middle');
-        fillBar.style.borderLeft = 'none';
-        fillRow.appendChild(fillBar);
-        allCells[i].cell.appendChild(fillRow);
-      }
+      weekLayers[w].appendChild(bar);
     }
   });
+
+  // 주별 레이어를 첫 셀에 배치
+  for (let w = 0; w < weekCount; w++) {
+    if (weekLayers[w].children.length === 0) continue;
+    const wStart = w * 7;
+    const row = allCells[wStart].cell;
+    // 주 높이 전체를 덮도록
+    weekLayers[w].style.height = '200px';
+    allCells[wStart].cell.style.position = 'relative';
+    // 주 전체 너비에 걸치는 레이어
+    const spanner = document.createElement('div');
+    spanner.style.position = 'absolute';
+    spanner.style.left = '0';
+    spanner.style.top = '0';
+    spanner.style.width = `${700}%`;
+    spanner.style.height = '100%';
+    spanner.style.pointerEvents = 'none';
+    spanner.style.zIndex = '3';
+    spanner.appendChild(weekLayers[w]);
+    weekLayers[w].style.position = 'absolute';
+    weekLayers[w].style.left = '0';
+    weekLayers[w].style.top = '0';
+    weekLayers[w].style.width = '100%';
+    weekLayers[w].style.height = '100%';
+    allCells[wStart].cell.appendChild(spanner);
+  }
+
+  // 각 셀의 상품 영역 위쪽 패딩 조정 (바가 있는 경우)
+  for (let w = 0; w < weekCount; w++) {
+    const maxSlot = (rowsInWeek[w] || []).length;
+    if (maxSlot === 0) continue;
+    const topPad = maxSlot * 24 + 4;
+    for (let c = 0; c < 7; c++) {
+      const idx = w * 7 + c;
+      if (allCells[idx]) {
+        allCells[idx].scheduleTopPad = topPad;
+      }
+    }
+  }
 }
 
 /* =========================================================
    상품 렌더
    ========================================================= */
 function renderProducts(allCells) {
-  allCells.forEach(({ cell, dateStr, isCurrentMonth }) => {
+  allCells.forEach(({ cell, dateStr, isCurrentMonth, scheduleTopPad }) => {
     if (!isCurrentMonth) return;
 
-    const dayProducts = products.filter(p => p.date === dateStr && matchesSearch(p));
+    const dayProducts = products.filter(p => p.date === dateStr);
     if (dayProducts.length === 0) return;
 
     const cardsWrap = document.createElement('div');
     cardsWrap.className = 'product-cards';
+    if (scheduleTopPad) cardsWrap.style.marginTop = (scheduleTopPad - 4) + 'px';
 
     const showMax = 3;
     dayProducts.slice(0, showMax).forEach(p => {
@@ -1578,6 +1853,7 @@ function makeProductCard(item) {
   const card = document.createElement('div');
   card.className = `product-card ${item.status}`;
   card.title = `${item.code || ''} ${item.name || ''}`;
+  card.dataset.productCode = item.code || '';
 
   if (item.image) {
     const img = document.createElement('img');
@@ -1603,6 +1879,31 @@ function makeProductCard(item) {
   return card;
 }
 
+/* =========================================================
+   강조 효과
+   ========================================================= */
+function applyHighlight() {
+  if (!highlightTarget) return;
+  setTimeout(() => {
+    let targetEl = null;
+    if (highlightTarget.type === 'product') {
+      targetEl = document.querySelector(`.product-card[data-product-code="${CSS.escape(highlightTarget.key)}"]`);
+    } else {
+      targetEl = document.querySelector(`.schedule-row[data-sch-key="${CSS.escape(highlightTarget.key)}"]`);
+    }
+    if (targetEl) {
+      // 부모 셀 펄스
+      const cell = targetEl.closest('.cal-day');
+      if (cell) cell.classList.add('highlight-day');
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        if (cell) cell.classList.remove('highlight-day');
+      }, 5500);
+    }
+    highlightTarget = null;
+  }, 200);
+}
+
 function formatShortDate(d) {
   if (!d) return '';
   const m = d.match(/(\d{4})-(\d{2})-(\d{2})/);
@@ -1612,7 +1913,7 @@ function formatShortDate(d) {
 
 function updateSummary() {
   const monthStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
-  const mp = products.filter(p => p.date && p.date.startsWith(monthStr) && matchesSearch(p));
+  const mp = products.filter(p => p.date && p.date.startsWith(monthStr));
   document.getElementById('cntDone').textContent = mp.filter(p=>p.status==='done').length;
   document.getElementById('cntSched').textContent = mp.filter(p=>p.status==='scheduled').length;
   document.getElementById('cntDraft').textContent = mp.filter(p=>p.status==='draft').length;
@@ -1623,19 +1924,23 @@ function updateSummary() {
    상세 모달
    ========================================================= */
 function openDetail(item) {
+  const editBtn = document.getElementById('editSheetBtn');
+
   if (item.type === 'schedule') {
     document.getElementById('detailTitle').textContent = item.name;
     let html = '<div class="detail-body">';
     html += row('종류', `<span class="status-badge schedule">📅 일정</span>`);
     html += row('시작일', item.date);
-    if (item.endDate && item.endDate !== item.date) html += row('종료일', item.endDate);
-    if (item.category) html += row('카테고리', escapeHtml(item.category));
-    if (item.memo) html += row('메모', escapeHtml(item.memo));
+    html += row('종료일', (item.endDate && item.endDate !== item.date) ? item.endDate : '—', !(item.endDate && item.endDate !== item.date));
+    html += row('카테고리', item.category ? escapeHtml(item.category) : '—', !item.category);
+    html += row('메모', item.memo ? escapeHtml(item.memo) : '—', !item.memo);
     html += '</div>';
     document.getElementById('detailContent').innerHTML = html;
+    editBtn.href = SHEET_EDIT_URL + '?gid=1585667082';
   } else {
     const statusLabels = { done: '업로드 완료', scheduled: '업로드 예정', draft: '보류' };
-    document.getElementById('detailTitle').textContent = item.name || item.code || '상품 상세';
+    // 최상단 제목 = 상품코드
+    document.getElementById('detailTitle').textContent = item.code || '상품 상세';
 
     let html = '';
     if (item.image) {
@@ -1643,18 +1948,27 @@ function openDetail(item) {
     }
     html += `<div class="detail-body">`;
     html += row('상태', `<span class="status-badge ${item.status}">${statusLabels[item.status]}</span>`);
-    if (item.code) html += row('상품 코드', escapeHtml(item.code));
-    if (item.name) html += row('상품명', escapeHtml(item.name));
-    if (item.date) html += row('업로드 날짜', item.date);
-    if (item.shipDate) html += row('선적 예정일', item.shipDate);
-    if (item.arriveDate) html += row('입고 예정일', item.arriveDate);
-    if (item.category) html += row('카테고리', escapeHtml(item.category));
-    if (item.subcategory) html += row('소분류', escapeHtml(item.subcategory));
-    if (item.size) html += row('사이즈', escapeHtml(item.size));
-    if (item.color) html += row('색상', escapeHtml(item.color));
-    if (item.vendor) html += row('거래처코드', escapeHtml(item.vendor));
+    html += row('상품 코드', item.code ? escapeHtml(item.code) : '—', !item.code);
+    html += row('상품명', item.name ? escapeHtml(item.name) : '—', !item.name);
+    html += row('업로드 날짜', item.date || '—', !item.date);
+    html += row('선적 예정일', item.shipDate || '—', !item.shipDate);
+    html += row('입고 예정일', item.arriveDate || '—', !item.arriveDate);
+    html += row('카테고리', item.category ? escapeHtml(item.category) : '—', !item.category);
+    html += row('소분류', item.subcategory ? escapeHtml(item.subcategory) : '—', !item.subcategory);
+    html += row('사이즈', item.size ? escapeHtml(item.size) : '—', !item.size);
+    html += row('색상', item.color ? escapeHtml(item.color) : '—', !item.color);
+    html += row('거래처코드', item.vendor ? escapeHtml(item.vendor) : '—', !item.vendor);
     html += `</div>`;
     document.getElementById('detailContent').innerHTML = html;
+
+    // 시트 수정 버튼: 해당 상품코드 셀로 이동
+    const rowInfo = item.code && productRowMap[item.code];
+    if (rowInfo) {
+      // gid=0 (상품 탭) + range=R{row}C{col}
+      editBtn.href = `${SHEET_EDIT_URL}?gid=0&range=R${rowInfo.row}C${rowInfo.col}`;
+    } else {
+      editBtn.href = SHEET_EDIT_URL + '?gid=0';
+    }
   }
   document.getElementById('detailModal').classList.add('open');
 }
@@ -1683,6 +1997,7 @@ function openDayList(dateStr, list) {
   document.getElementById('detailContent').innerHTML = html;
   document.getElementById('detailModal').classList.add('open');
   window._currentDayList = list;
+  document.getElementById('editSheetBtn').href = SHEET_EDIT_URL;
 }
 
 function showFromList(idx) {
@@ -1692,8 +2007,9 @@ function showFromList(idx) {
   setTimeout(() => openDetail(item), 150);
 }
 
-function row(label, val) {
-  return `<div class="detail-row"><span class="detail-label">${label}</span><span class="detail-val">${val}</span></div>`;
+function row(label, val, isEmpty) {
+  const cls = isEmpty ? ' class="detail-val empty"' : ' class="detail-val"';
+  return `<div class="detail-row"><span class="detail-label">${label}</span><span${cls}>${val}</span></div>`;
 }
 
 function closeModal(id) {
@@ -1721,24 +2037,20 @@ function renderReport(year) {
   const scheduled = yearProducts.filter(p => p.status === 'scheduled').length;
   const hold = yearProducts.filter(p => p.status === 'draft').length;
 
-  // 월별
   const byMonth = Array(12).fill(0);
   yearProducts.forEach(p => {
     const m = parseInt(p.date.split('-')[1]) - 1;
     if (!isNaN(m)) byMonth[m]++;
   });
 
-  // 상품코드 앞 2글자별 집계
   const byCodePrefix = {};
   yearProducts.forEach(p => {
     if (!p.code) return;
-    // NU-BL-001 형식이든 TO001 형식이든 앞 2글자
-    const match = p.code.match(/^([A-Za-z]{2})/);
+    const match = p.code.match(/^([A-Za-z가-힣]{2})/);
     const prefix = match ? match[1].toUpperCase() : (p.code.substring(0,2).toUpperCase() || '기타');
     byCodePrefix[prefix] = (byCodePrefix[prefix] || 0) + 1;
   });
 
-  // 소분류별 집계
   const bySubcategory = {};
   yearProducts.forEach(p => {
     const sub = p.subcategory || '미분류';
@@ -1762,12 +2074,11 @@ function renderReport(year) {
     `;
   }
 
-  // 코드 앞 2글자별 바 차트
   const codeEntries = Object.entries(byCodePrefix).sort((a,b) => b[1]-a[1]);
   const maxCode = codeEntries[0]?.[1] || 1;
   let codeHtml = '';
   if (codeEntries.length === 0) {
-    codeHtml = '<div style="text-align:center;padding:20px;color:var(--mid-gray);font-size:12px;">데이터 없음</div>';
+    codeHtml = '<div style="text-align:center;padding:20px;color:var(--mid-gray);font-size:12px;font-weight:700;">데이터 없음</div>';
   } else {
     codeEntries.forEach(([code, count]) => {
       const catName = categoryMap.categoryByCode?.[code] || '';
@@ -1782,12 +2093,11 @@ function renderReport(year) {
     });
   }
 
-  // 소분류별 바 차트
   const subEntries = Object.entries(bySubcategory).sort((a,b) => b[1]-a[1]);
   const maxSub = subEntries[0]?.[1] || 1;
   let subHtml = '';
   if (subEntries.length === 0) {
-    subHtml = '<div style="text-align:center;padding:20px;color:var(--mid-gray);font-size:12px;">데이터 없음</div>';
+    subHtml = '<div style="text-align:center;padding:20px;color:var(--mid-gray);font-size:12px;font-weight:700;">데이터 없음</div>';
   } else {
     subEntries.forEach(([sub, count]) => {
       const w = (count / maxSub * 100).toFixed(1);
@@ -1834,7 +2144,7 @@ function renderReport(year) {
       <div class="report-month-grid">${monthHtml}</div>
     </div>
     <div class="report-section">
-      <h3>BY CATEGORY CODE (앞 2글자)</h3>
+      <h3>BY CODE PREFIX (상품코드 앞 2글자)</h3>
       <div class="report-bar-list">${codeHtml}</div>
     </div>
     <div class="report-section">
